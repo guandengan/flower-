@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>flower</title>
+    <style>
+        :root {
+            --pink-neon: #ff007f;
+            --gold: #ffeb3b;
+            --bg: #050005;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background-color: var(--bg);
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: flex-end;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* Container Bunga */
+        .flower-stage {
+            position: relative;
+            bottom: 40px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.2s ease;
+        }
+
+        /* EFEK BERKEDUT / TWITCH */
+        .flower-stage:active {
+            transform: scale(0.9) translateY(10px);
+            filter: brightness(1.5);
+        }
+
+        /* Teks Instruksi */
+        .instruction {
+            position: absolute;
+            bottom: 120px;
+            color: white;
+            letter-spacing: 8px;
+            font-weight: bold;
+            text-shadow: 0 0 15px var(--pink-neon);
+            animation: breathe 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* Pesan Cinta yang Meledak */
+        .love-text {
+            position: absolute;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 100;
+            animation: burst 2.5s ease-out forwards;
+        }
+
+        @keyframes burst {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.1); }
+            15% { opacity: 1; }
+            100% { 
+                opacity: 0; 
+                transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) rotate(var(--r)) scale(2); 
+            }
+        }
+
+        /* Glitter Latar */
+        .star {
+            position: absolute; background: white; border-radius: 50%;
+            opacity: 0; animation: rise var(--t) linear infinite;
+        }
+        @keyframes rise {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body onclick="launch(event)">
+
+    <div class="instruction">TAP ME ❤️</div>
+
+    <div class="flower-stage">
+        <svg width="450" height="550" viewBox="0 0 200 280">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3.5" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+                <radialGradient id="gradPetal" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ff1493" stop-opacity="0.9" />
+                    <stop offset="100%" stop-color="#ff69b4" stop-opacity="0.1" />
+                </radialGradient>
+            </defs>
+
+            <g stroke="#2d0510" fill="none" stroke-linecap="round">
+                <path d="M100 280 C100 220 100 180 100 110" stroke-width="4" />
+                <path d="M100 280 C80 200 60 160 50 140" stroke-width="2.5" />
+                <path d="M100 280 C120 200 140 160 150 140" stroke-width="2.5" />
+            </g>
+
+            <g filter="url(#glow)">
+                <g transform="translate(100, 110)">
+                    <g class="petals">
+                        <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(0)" />
+                        <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(45)" />
+                        <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(90)" />
+                        <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(135)" />
+                        <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(22.5)" />
+                        <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(67.5)" />
+                        <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(112.5)" />
+                        <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(157.5)" />
+                    </g>
+                    <circle r="7" fill="#1a0005" />
+                    <circle r="4" fill="var(--gold)" />
+                </g>
+
+                <g transform="translate(50, 140) scale(0.6)">
+                    <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(0)" />
+                    <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(60)" />
+                    <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(120)" />
+                    <circle r="6" fill="#1a0005" /><circle r="3" fill="var(--gold)" />
+                </g>
+
+                <g transform="translate(150, 140) scale(0.6)">
+                    <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(0)" />
+                    <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(60)" />
+                    <ellipse rx="15" ry="35" fill="url(#gradPetal)" transform="rotate(120)" />
+                    <circle r="6" fill="#1a0005" /><circle r="3" fill="var(--gold)" />
+                </g>
+            </g>
+        </svg>
+    </div>
+
+    <script>
+        const words = ["SEMANGAT CIOK", "SEMANGAT MAMA PAUS", "BE HAPPY", "MY KIND PERSON", "OYEEEE"];
+        const colors = ["#ff1493", "#ff69b4", "#ffeb3b", "#ffffff"];
+
+        function launch(e) {
+            // Efek Ledakan Pesan
+            for(let i=0; i<25; i++) {
+                const span = document.createElement('div');
+                span.className = 'love-text';
+                span.innerText = words[Math.floor(Math.random() * words.length)];
+                span.style.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 150 + Math.random() * 300;
+                
+                span.style.setProperty('--x', Math.cos(angle) * dist + 'px');
+                span.style.setProperty('--y', Math.sin(angle) * dist + 'px');
+                span.style.setProperty('--r', (Math.random() * 60 - 30) + 'deg');
+                
+                span.style.left = e.clientX + 'px';
+                span.style.top = e.clientY + 'px';
+                
+                document.body.appendChild(span);
+                setTimeout(() => span.remove(), 2500);
+            }
+        }
+
+        // Efek Glitter Mengalir
+        setInterval(() => {
+            const s = document.createElement('div');
+            s.className = 'star';
+            const size = Math.random() * 3 + 1;
+            s.style.width = size + 'px'; s.style.height = size + 'px';
+            s.style.left = Math.random() * 100 + 'vw';
+            s.style.bottom = '0';
+            s.style.setProperty('--t', (Math.random() * 5 + 4) + 's');
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 9000);
+        }, 200);
+    </script>
+</body>
+</html>
